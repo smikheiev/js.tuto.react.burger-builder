@@ -18,6 +18,7 @@ const buildControls = (props) => (
         label={control.label}
         moreClick={() => props.addIngredient(control.type)}
         lessClick={() => props.removeIngredient(control.type)}
+        disabled={props.disabled[control.type]}
       />
     })}
   </div>
