@@ -12,9 +12,16 @@ const burger = (props) => {
   const allIngredientTypesFlattened = allIngredientTypes.reduce((previousValue, currentValue) => {
     return [...previousValue, ...currentValue]
   })
-  const ingredientComponents = allIngredientTypesFlattened.map((type, index) => {
-    return <BurgerIngredient key={index} type={type}/>
-  })
+
+  let ingredientComponents = null
+  if (allIngredientTypesFlattened.length === 0) {
+    ingredientComponents = <p>Add some ingredients</p>
+  }
+  else {
+    ingredientComponents = allIngredientTypesFlattened.map((type, index) => {
+      return <BurgerIngredient key={index} type={type}/>
+    })
+  }
 
   return (
     <div className={styles.Burger}>
