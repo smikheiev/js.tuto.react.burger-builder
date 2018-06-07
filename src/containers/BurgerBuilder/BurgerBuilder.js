@@ -83,6 +83,10 @@ class BurgerBuilder extends Component {
     })
   }
 
+  purchaseContinueHandler = () => {
+    alert('You did it!')
+  }
+
   areIngredientsPurchable = (ingredients) => {
     const sum = Object.keys(ingredients)
       .map((key) => ingredients[key])
@@ -100,7 +104,10 @@ class BurgerBuilder extends Component {
     return (
       <Aux>
         <Modal show={this.state.isPurchasing} closeModal={this.purchaseCancelHandler}>
-          <OrderSummary ingredients={this.state.ingredients}/>
+          <OrderSummary
+            cancelPurchase={this.purchaseCancelHandler}
+            continuePurchase={this.purchaseContinueHandler}
+            ingredients={this.state.ingredients}/>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
         <BuildControls
