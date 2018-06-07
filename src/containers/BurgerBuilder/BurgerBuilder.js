@@ -72,10 +72,14 @@ class BurgerBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    const newIsPurchasing = !this.state.isPurchasing
-
     this.setState({
-      isPurchasing: newIsPurchasing,
+      isPurchasing: true,
+    })
+  }
+
+  purchaseCancelHandler = () => {
+    this.setState({
+      isPurchasing: false,
     })
   }
 
@@ -95,7 +99,7 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <Modal show={this.state.isPurchasing}>
+        <Modal show={this.state.isPurchasing} closeModal={this.purchaseCancelHandler}>
           <OrderSummary ingredients={this.state.ingredients}/>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
