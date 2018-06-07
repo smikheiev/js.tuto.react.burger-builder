@@ -23,6 +23,7 @@ class BurgerBuilder extends Component {
     },
     totalPrice: 4,
     isPurchasable: false,
+    isPurchasing: false,
   }
 
   addIngredientHandler = (type) => {
@@ -70,6 +71,14 @@ class BurgerBuilder extends Component {
     })
   }
 
+  purchaseHandler = () => {
+    const newIsPurchasing = !this.state.isPurchasing
+
+    this.setState({
+      isPurchasing: newIsPurchasing,
+    })
+  }
+
   areIngredientsPurchable = (ingredients) => {
     const sum = Object.keys(ingredients)
       .map((key) => ingredients[key])
@@ -86,13 +95,14 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <Modal>
+        <Modal show={this.state.isPurchasing}>
           <OrderSummary ingredients={this.state.ingredients}/>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
         <BuildControls
           addIngredient={this.addIngredientHandler}
           removeIngredient={this.removeIngredientHandler}
+          orderClick={this.purchaseHandler}
           disabled={disabledInfo}
           price={this.state.totalPrice}
           isPurchasable={this.state.isPurchasable}
