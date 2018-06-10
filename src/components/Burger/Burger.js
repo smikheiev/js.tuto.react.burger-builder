@@ -9,9 +9,13 @@ const burger = (props) => {
     const ingredientCount = +(props.ingredients[type])
     return Array(ingredientCount).fill(type)
   })
-  const allIngredientTypesFlattened = allIngredientTypes.reduce((previousValue, currentValue) => {
-    return [...previousValue, ...currentValue]
-  })
+
+  let allIngredientTypesFlattened = []
+  if (allIngredientTypes.length > 0) {
+    allIngredientTypesFlattened = allIngredientTypes.reduce((previousValue, currentValue) => {
+      return [...previousValue, ...currentValue]
+    })
+  }
 
   let ingredientComponents = null
   if (allIngredientTypesFlattened.length === 0) {
