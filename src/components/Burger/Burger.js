@@ -6,7 +6,7 @@ import styles from './Burger.css'
 const burger = (props) => {
   const ingredientTypes = Object.keys(props.ingredients)
   const allIngredientTypes = ingredientTypes.map((type) => {
-    const ingredientCount = props.ingredients[type]
+    const ingredientCount = +(props.ingredients[type])
     return Array(ingredientCount).fill(type)
   })
   const allIngredientTypesFlattened = allIngredientTypes.reduce((previousValue, currentValue) => {
