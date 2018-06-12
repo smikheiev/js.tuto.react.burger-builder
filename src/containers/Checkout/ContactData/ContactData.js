@@ -17,7 +17,7 @@ class ContactData extends Component {
           autoComplete: 'name',
         },
         value: '',
-        validation: {
+        validationRules: {
           required: true,
         },
         isValid: false,
@@ -31,7 +31,7 @@ class ContactData extends Component {
           autoComplete: 'email',
         },
         value: '',
-        validation: {
+        validationRules: {
           required: true,
         },
         isValid: false,
@@ -45,7 +45,7 @@ class ContactData extends Component {
           autoComplete: 'tel',
         },
         value: '',
-        validation: {
+        validationRules: {
           required: true,
           minLength: 9,
           maxLength: 12,
@@ -61,7 +61,7 @@ class ContactData extends Component {
           autoComplete: 'address',
         },
         value: '',
-        validation: {
+        validationRules: {
           required: true,
         },
         isValid: false,
@@ -140,13 +140,13 @@ class ContactData extends Component {
       ...newOrderForm[inputId],
     }
     newFormElement.value = event.target.value
-    newFormElement.isValid = this.checkValidity(event.target.value, newFormElement.validation)
+    newFormElement.isValid = this.checkValidity(event.target.value, newFormElement.validationRules)
     newFormElement.wasTouched = true
     newOrderForm[inputId] = newFormElement
 
     let newIsFormValid = true
     for (let key in newOrderForm) {
-      if (newOrderForm[key].validation) {
+      if (newOrderForm[key].validationRules) {
         newIsFormValid = newIsFormValid && newOrderForm[key].isValid
       }
     }
@@ -179,7 +179,7 @@ class ContactData extends Component {
               elementConfig={element.config.elementConfig}
               value={element.config.value}
               isValid={element.config.isValid}
-              shouldValidate={!!element.config.validation}
+              shouldValidate={!!element.config.validationRules}
               wasTouched={element.config.wasTouched}
               change={(event) => this.inputChangeHandler(event, element.id)}
             />
