@@ -16,7 +16,12 @@ class ContactData extends Component {
           placeholder: 'Name',
           autoComplete: 'name',
         },
-        value: 'Serhii Mikheiev',
+        value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        wasTouched: false,
       },
       email: {
         elementType: 'input',
@@ -26,6 +31,11 @@ class ContactData extends Component {
           autoComplete: 'email',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        wasTouched: false,
       },
       phone: {
         elementType: 'input',
@@ -35,6 +45,13 @@ class ContactData extends Component {
           autoComplete: 'tel',
         },
         value: '',
+        validation: {
+          required: true,
+          minLength: 9,
+          maxLength: 12,
+        },
+        isValid: false,
+        wasTouched: false,
       },
       street: {
         elementType: 'input',
@@ -44,6 +61,11 @@ class ContactData extends Component {
           autoComplete: 'address',
         },
         value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        wasTouched: false,
       },
       deliveryMethod: {
         elementType: 'select',
@@ -90,6 +112,25 @@ class ContactData extends Component {
       })
   }
 
+  checkValidity = (value, rules) => {
+    if (!rules) {
+      return true
+    }
+
+    let isValid = true
+    if (rules.required) {
+      isValid = isValid && value.trim().length > 0
+    }
+    if (rules.minLength) {
+      isValid = isValid && value.length >= rules.minLength
+    }
+    if (rules.maxLength) {
+      isValid = isValid && value.length <= rules.maxLength
+    }
+
+    return isValid
+  }
+
   inputChangeHandler = (event, inputId) => {
     const newOrderForm = {
       ...this.state.orderForm,
@@ -98,6 +139,8 @@ class ContactData extends Component {
       ...newOrderForm[inputId],
     }
     newFormElement.value = event.target.value
+    newFormElement.isValid = this.checkValidity(event.target.value, newFormElement.validation)
+    newFormElement.wasTouched = true
     newOrderForm[inputId] = newFormElement
 
     this.setState({
@@ -126,6 +169,9 @@ class ContactData extends Component {
               elementType={element.config.elementType}
               elementConfig={element.config.elementConfig}
               value={element.config.value}
+              isValid={element.config.isValid}
+              shouldValidate={!!element.config.validation}
+              wasTouched={element.config.wasTouched}
               change={(event) => this.inputChangeHandler(event, element.id)}
             />
           ))}
