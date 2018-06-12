@@ -78,6 +78,7 @@ class ContactData extends Component {
         value: '',
       },
     },
+    isFormValid: false,
     isSendingOrder: false,
   }
 
@@ -143,8 +144,16 @@ class ContactData extends Component {
     newFormElement.wasTouched = true
     newOrderForm[inputId] = newFormElement
 
+    let newIsFormValid = true
+    for (let key in newOrderForm) {
+      if (newOrderForm[key].validation) {
+        newIsFormValid = newIsFormValid && newOrderForm[key].isValid
+      }
+    }
+
     this.setState({
       orderForm: newOrderForm,
+      isFormValid: newIsFormValid,
     })
   }
 
@@ -175,7 +184,7 @@ class ContactData extends Component {
               change={(event) => this.inputChangeHandler(event, element.id)}
             />
           ))}
-          <Button buttonType='Success'>ORDER</Button>
+          <Button buttonType='Success' disabled={!this.state.isFormValid}>ORDER</Button>
         </form>
       )
     }
