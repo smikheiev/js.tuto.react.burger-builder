@@ -15,23 +15,10 @@ class BurgerBuilder extends Component {
   state = {
     isPurchasable: false,
     isPurchasing: false,
-    isLoading: false,
-    error: null
   }
 
   componentDidMount () {
-    // axios.get('/ingredients.json')
-    //   .then(response => {
-    //     const newIngredients = response.data
-    //     this.setState({
-    //       ingredients: newIngredients
-    //     })
-    //   })
-    //   .catch(error => {
-    //     this.setState({
-    //       error: error,
-    //     })
-    //   })
+    this.props.onInitIngredients()
   }
 
   purchaseHandler = () => {
@@ -78,7 +65,7 @@ class BurgerBuilder extends Component {
     let burger = null
     if (this.props.ingredients) {
       burger = <Burger ingredients={this.props.ingredients}/>
-    } else if (this.state.error) {
+    } else if (this.props.error) {
       burger = <p>Ingredients can not be loaded</p>
     } else {
       burger = <Spinner/>
@@ -114,6 +101,7 @@ const mapStateToProps = state => {
   return {
     ingredients: state.ingredients,
     totalPrice: state.totalPrice,
+    error: state.error,
   }
 }
 
@@ -121,6 +109,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onAddIngredient: (ingredientType) => dispatch(burgerBuilderActions.addIngredient(ingredientType)),
     onRemoveIngredient: (ingredientType) => dispatch(burgerBuilderActions.removeIngredient(ingredientType)),
+    onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
   }
 }
 
