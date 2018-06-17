@@ -9,7 +9,7 @@ import Modal from '../../components/Ui/Modal/Modal'
 import Spinner from '../../components/Ui/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import axios from '../../axios-orders'
-import * as Actions from '../../store/actions'
+import * as burgerBuilderActions from '../../store/actions/burgerBuilder'
 
 class BurgerBuilder extends Component {
   state = {
@@ -119,8 +119,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddIngredient: (ingredientType) => dispatch({type: Actions.ADD_INGREDIENT, ingredientType}),
-    onRemoveIngredient: (ingredientType) => dispatch({type: Actions.REMOVE_INGREDIENT, ingredientType}),
+    onAddIngredient: (ingredientType) => dispatch(burgerBuilderActions.addIngredient(ingredientType)),
+    onRemoveIngredient: (ingredientType) => dispatch(burgerBuilderActions.removeIngredient(ingredientType)),
   }
 }
 
