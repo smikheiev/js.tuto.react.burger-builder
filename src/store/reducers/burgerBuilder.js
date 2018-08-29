@@ -2,7 +2,8 @@ import * as actionsTypes from '../actions/actionsTypes'
 
 const initialState = {
   ingredients: null,
-  totalPrice: 4,
+  basePrice: 4,
+  totalPrice: 0,
   error: false,
 }
 
@@ -37,6 +38,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         ingredients: action.ingredients,
+        totalPrice: state.basePrice + calculateIngredientsPrice(action.ingredients),
         error: false,
       }
     case actionsTypes.FETCH_INGREDIENTS_FAILED:
@@ -47,6 +49,12 @@ const reducer = (state = initialState, action) => {
     default:
       return state
   }
+}
+
+const calculateIngredientsPrice = (ingredients) => {
+  return Object.keys(ingredients)
+    .map((ingredientType) => ingredients[ingredientType] * INGREDIENT_PRICES[ingredientType])
+    .reduce((sum, current) => sum + current, 0)
 }
 
 export default reducer
