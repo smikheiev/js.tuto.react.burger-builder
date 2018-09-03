@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import Input from '../../components/Ui/Input/Input'
 import Button from '../../components/Ui/Button/Button'
+import Spinner from '../../components/Ui/Spinner/Spinner'
 import styles from './Auth.css'
 import * as authActions from '../../store/actions/auth'
 
@@ -98,36 +99,49 @@ class Auth extends Component {
   }
 
   render () {
-    const formElements = []
-    for (let key in this.state.controls) {
-      formElements.push({
-        id: key,
-        config: this.state.controls[key],
-      })
+    let form = null
+    if (this.props.isLoading) {
+      form = <Spinner/>
+    } else {
+      const formElements = []
+      for (let key in this.state.controls) {
+        formElements.push({
+          id: key,
+          config: this.state.controls[key],
+        })
+      }
+
+      form = (
+        <form onSubmit={this.submitHandler}>
+          {formElements.map(element => (
+            <Input
+              key={element.id}
+              elementType={element.config.elementType}
+              elementConfig={element.config.elementConfig}
+              value={element.config.value}
+              isValid={element.config.isValid}
+              shouldValidate={!!element.config.validationRules}
+              wasTouched={element.config.wasTouched}
+              change={(event) => this.inputChangeHandler(event, element.id)}
+            />
+          ))}
+          <Button buttonType='Success'
+                  disabled={!this.state.isFormValid}>{this.state.isInSignUpMode ? 'SIGN UP' : 'SIGN IN'}
+          </Button>
+        </form>
+      )
     }
 
-    const form = (
-      <form onSubmit={this.submitHandler}>
-        {formElements.map(element => (
-          <Input
-            key={element.id}
-            elementType={element.config.elementType}
-            elementConfig={element.config.elementConfig}
-            value={element.config.value}
-            isValid={element.config.isValid}
-            shouldValidate={!!element.config.validationRules}
-            wasTouched={element.config.wasTouched}
-            change={(event) => this.inputChangeHandler(event, element.id)}
-          />
-        ))}
-        <Button buttonType='Success'
-                disabled={!this.state.isFormValid}>{this.state.isInSignUpMode ? 'SIGN UP' : 'SIGN IN'}
-        </Button>
-      </form>
-    )
+    let errorMessage = null
+    if (this.props.error) {
+      errorMessage = (
+        <p>{this.props.error.message}</p>
+      )
+    }
 
     return (
       <div className={styles.Auth}>
+        {errorMessage}
         {form}
         <Button buttonType='Danger' clicked={this.switchAuthModeHandler}>
           SWITCH TO {this.state.isInSignUpMode ? 'SIGN IN' : 'SIGN UP'}
@@ -137,10 +151,17 @@ class Auth extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isLoading: state.auth.isLoading,
+    error: state.auth.error,
+  }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (email, password, isSignUp) => dispatch(authActions.auth(email, password, isSignUp))
   }
 }
 
-export default connect(null, mapDispatchToProps)(Auth)
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)
