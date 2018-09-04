@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import Input from '../../components/Ui/Input/Input'
 import Button from '../../components/Ui/Button/Button'
@@ -42,6 +43,12 @@ class Auth extends Component {
     },
     isFormValid: false,
     isInSignUpMode: true,
+  }
+
+  componentDidMount () {
+    if (!this.props.isBuildingBurger && this.props.authRedirectPath !== '/') {
+      this.props.onSetAuthRedirectPath('/')
+    }
   }
 
   submitHandler = (event) => {
@@ -99,6 +106,10 @@ class Auth extends Component {
   }
 
   render () {
+    if (this.props.isAuthenticated) {
+      return <Redirect to={this.props.authRedirectPath}/>
+    }
+
     let form = null
     if (this.props.isLoading) {
       form = <Spinner/>
@@ -155,12 +166,16 @@ const mapStateToProps = state => {
   return {
     isLoading: state.auth.isLoading,
     error: state.auth.error,
+    isAuthenticated: state.auth.token !== null,
+    isBuildingBurger: state.burgerBuilder.isBuilding,
+    authRedirectPath: state.auth.authRedirectPath,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password, isSignUp) => dispatch(authActions.auth(email, password, isSignUp))
+    onAuth: (email, password, isSignUp) => dispatch(authActions.auth(email, password, isSignUp)),
+    onSetAuthRedirectPath: (path) => dispatch(authActions.setRedirectPath(path)),
   }
 }
 

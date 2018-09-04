@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 import * as actionsTypes from './actionsTypes'
-import logo from '../../components/Logo/Logo'
 
 export const authStart = () => {
   return {
@@ -58,5 +57,12 @@ export const auth = (email, password, isSignUp) => {
       .catch(error => {
         dispatch(authFail(error.response.data.error))
       })
+  }
+}
+
+export const setRedirectPath = (path) => {
+  return {
+    type: actionsTypes.AUTH_SET_REDIRECT_PATH,
+    path,
   }
 }
