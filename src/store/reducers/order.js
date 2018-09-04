@@ -54,6 +54,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
       }
+    case actionsTypes.AUTH_LOGOUT:
+      return {
+        ...state,
+        orders: [],
+      }
     default:
       return state
   }
