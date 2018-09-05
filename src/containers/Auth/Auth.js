@@ -7,6 +7,7 @@ import Button from '../../components/Ui/Button/Button'
 import Spinner from '../../components/Ui/Spinner/Spinner'
 import styles from './Auth.css'
 import * as authActions from '../../store/actions/auth'
+import { checkValidity } from '../../shared/validation'
 
 class Auth extends Component {
   state = {
@@ -56,32 +57,13 @@ class Auth extends Component {
     this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isInSignUpMode)
   }
 
-  checkValidity = (value, rules) => {
-    if (!rules) {
-      return true
-    }
-
-    let isValid = true
-    if (rules.required) {
-      isValid = isValid && value.trim().length > 0
-    }
-    if (rules.minLength) {
-      isValid = isValid && value.length >= rules.minLength
-    }
-    if (rules.maxLength) {
-      isValid = isValid && value.length <= rules.maxLength
-    }
-
-    return isValid
-  }
-
   inputChangeHandler = (event, controlId) => {
     const newControls = {
       ...this.state.controls,
       [controlId]: {
         ...this.state.controls[controlId],
         value: event.target.value,
-        isValid: this.checkValidity(event.target.value, this.state.controls[controlId].validationRules),
+        isValid: checkValidity(event.target.value, this.state.controls[controlId].validationRules),
         wasTouched: true,
       }
     }

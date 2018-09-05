@@ -8,6 +8,7 @@ import styles from './ContactData.css'
 import axios from '../../../axios-orders'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import * as orderActions from '../../../store/actions/order'
+import { checkValidity } from '../../../shared/validation'
 
 class ContactData extends Component {
   state = {
@@ -102,25 +103,6 @@ class ContactData extends Component {
     this.props.onOrderBurger(order, this.props.authToken)
   }
 
-  checkValidity = (value, rules) => {
-    if (!rules) {
-      return true
-    }
-
-    let isValid = true
-    if (rules.required) {
-      isValid = isValid && value.trim().length > 0
-    }
-    if (rules.minLength) {
-      isValid = isValid && value.length >= rules.minLength
-    }
-    if (rules.maxLength) {
-      isValid = isValid && value.length <= rules.maxLength
-    }
-
-    return isValid
-  }
-
   inputChangeHandler = (event, inputId) => {
     const newOrderForm = {
       ...this.state.orderForm,
@@ -129,7 +111,7 @@ class ContactData extends Component {
       ...newOrderForm[inputId],
     }
     newFormElement.value = event.target.value
-    newFormElement.isValid = this.checkValidity(event.target.value, newFormElement.validationRules)
+    newFormElement.isValid = checkValidity(event.target.value, newFormElement.validationRules)
     newFormElement.wasTouched = true
     newOrderForm[inputId] = newFormElement
 
