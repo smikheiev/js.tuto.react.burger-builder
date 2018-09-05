@@ -31,7 +31,6 @@ const withErrorHandler = (WrappedComponent, axios) => {
     }
 
     errorConfirmedHandler = () => {
-      console.log('>>> ', 'CLICKCLICKCLIKC')
       this.setState({
         error: null,
       })
